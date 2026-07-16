@@ -69,19 +69,14 @@ bcovid2021 <- bcovid2021 %>%
   dplyr::select(data, obitosNovos)
 
 acovid2025_mensal <- acovid2025 %>%
-  # 1. Garante que a coluna 'data' está no formato correto de data
   mutate(data = as.Date(data)) %>% 
   
-  # 2. Cria uma nova coluna apenas com o Ano-Mês (ex: "2025-01-01")
   mutate(mes = floor_date(data, "month")) %>% 
   
-  # 3. Agrupa os dados por este mês
   group_by(mes) %>% 
   
-  # 4. Soma os óbitos de todos os dias daquele mês
   summarise(obitosNovos = sum(obitosNovos, na.rm = TRUE)) %>% 
-  
-  # 5. Desagrupa para evitar comportamentos estranhos depois
+
   ungroup()
 
 
@@ -213,5 +208,4 @@ tabela_final_longa <- bind_rows(
   bcovid2025_mensal,
   acovid2025_mensal
 ) %>% 
-  # Opcional: ordenar a tabela final por ordem cronológica
   arrange(mes)
